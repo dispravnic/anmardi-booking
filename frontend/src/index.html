@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AnMardi EV Spot Booking</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Electric vehicle charging spot booking with SMS confirmation" />
+
+    <!-- Runtime environment — replaced by Nginx sub_filter or Docker entrypoint -->
+    <script>
+      window.__env = {
+        API_BASE_URL: '$API_BASE_URL'  // substituted at container start
+      };
+    </script>
+
+    <!-- Google Maps JS API -->
+    <script>
+      function initGoogleMaps() {
+        window['googleMapsReady'] = true;
+        if (window['onGoogleMapsReady']) window['onGoogleMapsReady']();
+      }
+    </script>
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLQ1JyAOHD_HIYNbUKNhtgQSSQX3GQpYU&callback=initGoogleMaps"
+    ></script>
+
+    <style>
+      /* ── Global reset & tokens ── */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --brand-green: #2ecc71;
+        --brand-dark:  #1a1a2e;
+        --brand-mid:   #16213e;
+        --brand-blue:  #0f3460;
+        --text-light:  #e0e0e0;
+        --text-muted:  #a0a0b0;
+        --radius:      10px;
+        --shadow:      0 4px 24px rgba(0,0,0,.4);
+      }
+
+      body {
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        background: var(--brand-dark);
+        color: var(--text-light);
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      app-root { display: flex; flex-direction: column; height: 100vh; }
+      app-ev-map { display: flex; flex: 1; min-height: 0; width: 100%; }
+    </style>
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
+</html>

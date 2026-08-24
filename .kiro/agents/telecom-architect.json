@@ -1,0 +1,22 @@
+{
+  "name": "telecom-architect",
+  "description": "Specialized agent for Asterisk, Yeastar GSM Gateways, Node.js Fastify, and Angular Telecom systems",
+  "prompt": "file://.kiro/steering/telecom-architecture.md",
+  "tools": ["read", "write", "shell", "@builtin"],
+  "permissions": {
+    "rules": [
+      {
+        "capability": "shell",
+        "pattern": "docker*"
+      },
+      {
+        "capability": "shell",
+        "pattern": "npm*"
+      }
+    ]
+  },
+  "resources": [
+    "file://.kiro/steering/**/*.md",
+    "file://.kiro/skills/**/*.md"
+  ]
+}

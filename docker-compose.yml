@@ -1,0 +1,73 @@
+services:
+
+  # ─────────────────────────────────────────────
+  # Mock Yeastar TG1600 GSM Gateway
+  # ─────────────────────────────────────────────
+  mock-yeastar:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.mock
+    container_name: mock-yeastar
+    ports:
+      - "8080:8080"
+    networks:
+      - telecom-net
+    restart: unless-stopped
+
+  # ─────────────────────────────────────────────
+  # Asterisk PBX
+  # ─────────────────────────────────────────────
+  asterisk:
+    image: andrius/asterisk:latest
+    container_name: asterisk
+    ports:
+      - "5060:5060/udp"
+      - "5038:5038"
+      - "10000-10099:10000-10099/udp"
+    volumes:
+      - ./asterisk/pjsip.conf:/etc/asterisk/pjsip.conf:ro
+      - ./asterisk/extensions.conf:/etc/asterisk/extensions.conf:ro
+      - ./asterisk/manager.conf:/etc/asterisk/manager.conf:ro
+    networks:
+      - telecom-net
+    depends_on:
+      - mock-yeastar
+    restart: unless-stopped
+
+  # ─────────────────────────────────────────────
+  # Fastify Backend API
+  # ─────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    networks:
+      - telecom-net
+    depends_on:
+      - mock-yeastar
+    restart: unless-stopped
+
+  # ─────────────────────────────────────────────
+  # Angular Frontend (Nginx)
+  # ─────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "4200:80"
+    networks:
+      - telecom-net
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  telecom-net:
+    driver: bridge

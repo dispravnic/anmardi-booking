@@ -1,0 +1,30 @@
+{
+  "name": "anmardi-booking-frontend",
+  "version": "1.0.0",
+  "description": "EV Spot Booking — Angular 20 standalone frontend",
+  "scripts": {
+    "start": "ng serve --host 0.0.0.0 --port 4200",
+    "build": "ng build --configuration production",
+    "build:dev": "ng build --configuration development"
+  },
+  "dependencies": {
+    "@angular/animations": "20.0.0",
+    "@angular/common": "20.0.0",
+    "@angular/compiler": "20.0.0",
+    "@angular/core": "20.0.0",
+    "@angular/forms": "20.0.0",
+    "@angular/google-maps": "20.0.0",
+    "@angular/platform-browser": "20.0.0",
+    "@angular/platform-browser-dynamic": "20.0.0",
+    "@angular/router": "20.0.0",
+    "rxjs": "7.8.1",
+    "tslib": "2.7.0",
+    "zone.js": "0.15.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "20.0.0",
+    "@angular/cli": "20.0.0",
+    "@angular/compiler-cli": "20.0.0",
+    "typescript": "5.8.3"
+  }
+}

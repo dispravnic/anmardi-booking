@@ -1,0 +1,39 @@
+<!-- app.component.html — full-height shell -->
+<header class="app-header">
+  <span class="logo">&#9889; AnMardi EV Booking</span>
+  <span class="subtitle">Bucharest Charging Stations</span>
+</header>
+
+<main class="app-main">
+  <app-ev-map />
+</main>
+
+<style>
+  .app-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 24px;
+    background: var(--brand-mid);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    flex-shrink: 0;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--brand-green);
+    letter-spacing: .03em;
+  }
+
+  .subtitle {
+    font-size: .85rem;
+    color: var(--text-muted);
+  }
+
+  .app-main {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+  }
+</style>

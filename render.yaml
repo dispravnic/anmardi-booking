@@ -1,0 +1,78 @@
+# ═══════════════════════════════════════════════════════════════
+# render.yaml — Render Blueprint
+# Deploys the full AnMardi EV Booking stack:
+#   1. mock-yeastar  (Node, port 8080)
+#   2. backend       (Node/Fastify, port 3000)
+#   3. frontend      (Nginx static, port 80)
+# ═══════════════════════════════════════════════════════════════
+
+services:
+
+  # ── Mock Yeastar TG1600 GSM Gateway ─────────────────────────
+  - type: web
+    name: mock-yeastar
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile.mock
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8080
+
+  # ── Fastify Backend API ───────────────────────────────────────
+  - type: web
+    name: anmardi-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      # Yeastar — points at mock-yeastar service on Render internal network
+      - key: YEASTAR_GATEWAY_URL
+        fromService:
+          name: mock-yeastar
+          type: web
+          property: hostport
+      - key: YEASTAR_ACCOUNT
+        value: admin
+      - key: YEASTAR_PASSWORD
+        value: admin123
+      # Asterisk AMI — not available on Render free tier (Linux PBX)
+      - key: ASTERISK_HOST
+        value: localhost
+      - key: ASTERISK_PORT
+        value: 5038
+      - key: ASTERISK_AMI_USER
+        value: admin
+      - key: ASTERISK_AMI_SECRET
+        value: secret
+      # Twilio — set these in Render Dashboard → Environment (do not commit)
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_FROM_NUMBER
+        sync: false
+      # CORS — set to your frontend Render URL after first deploy
+      - key: CORS_ORIGIN
+        sync: false
+
+  # ── Angular Frontend (Nginx) ──────────────────────────────────
+  - type: web
+    name: anmardi-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: free
+    # Pass the live backend URL at build time via build arg
+    buildArgs:
+      - API_BASE_URL=https://anmardi-backend.onrender.com
+    envVars:
+      - key: API_BASE_URL
+        value: https://anmardi-backend.onrender.com

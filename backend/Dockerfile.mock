@@ -1,0 +1,17 @@
+# Dockerfile.mock — Mock Yeastar TG1600 GSM Gateway
+# Minimal image: no npm dependencies needed (pure Node built-ins only)
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Non-root user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+COPY mockYeastar.js ./
+
+RUN chown -R appuser:appgroup /app
+USER appuser
+
+EXPOSE 8080
+
+CMD ["node", "mockYeastar.js"]

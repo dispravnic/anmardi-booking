@@ -1,0 +1,139 @@
+<div class="ev-layout">
+
+  <!-- ── Google Map ────────────────────────────────────────────────── -->
+  <div class="map-wrapper">
+    <div #mapCanvas class="map-canvas"></div>
+    @if (mapError()) {
+      <div class="map-error" role="alert">
+        {{ mapError() }}
+      </div>
+    }
+  </div>
+
+  <!-- ── Sidebar ───────────────────────────────────────────────────── -->
+  <aside class="sidebar" aria-label="EV booking sidebar">
+
+    <!-- Station list -->
+    <section class="panel station-panel">
+      <h2 class="panel-title">
+        <span class="panel-icon" aria-hidden="true">📍</span>
+        Charging Stations
+      </h2>
+      <ul class="station-list" role="list">
+        @for (s of stations(); track s.id) {
+          <li>
+            <button
+              class="station-item"
+              [class.active]="selectedStation()?.id === s.id"
+              (click)="selectStation(s)"
+              [attr.aria-pressed]="selectedStation()?.id === s.id"
+              [attr.aria-label]="'Select ' + s.name"
+            >
+              <span class="pin-dot" aria-hidden="true">⚡</span>
+              <span class="station-info">
+                <strong>{{ s.name }}</strong>
+                <small>{{ s.address }}</small>
+                <span class="station-meta">
+                  {{ s.connectors }} connectors · {{ s.powerKw }} kW
+                </span>
+              </span>
+            </button>
+          </li>
+        }
+      </ul>
+    </section>
+
+    <!-- Booking card -->
+    @if (selectedStation()) {
+      <section class="panel booking-panel" aria-label="Booking form">
+        <h2 class="panel-title">
+          <span class="panel-icon" aria-hidden="true">🗓</span>
+          Reserve a Slot
+        </h2>
+        <p class="selected-name">{{ selectedStation()!.name }}</p>
+
+        <form (ngSubmit)="submitBooking()" #bookForm="ngForm" novalidate>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fDate">Date</label>
+              <input id="fDate" type="date"
+                [(ngModel)]="form.date" name="date"
+                [min]="today" required aria-required="true" />
+            </div>
+            <div class="form-group">
+              <label for="fTime">Time</label>
+              <input id="fTime" type="time"
+                [(ngModel)]="form.time" name="time"
+                required aria-required="true" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fPhone">Mobile phone</label>
+            <input id="fPhone" type="tel"
+              [(ngModel)]="form.targetPhone" name="targetPhone"
+              placeholder="+40712345678"
+              required minlength="5" aria-required="true" />
+          </div>
+
+          <div class="form-group">
+            <label for="fSim">Dedicated SIM slot (1–16)</label>
+            <select id="fSim"
+              [(ngModel)]="form.simSlot" name="simSlot"
+              required aria-required="true">
+              @for (n of simSlots; track n) {
+                <option [value]="n">SIM {{ n }}
+                  @if (simAssignments()['SIM_' + n] && simAssignments()['SIM_' + n].assignedTo) {
+                    — {{ simAssignments()['SIM_' + n].assignedTo }}
+                  }
+                </option>
+              }
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary"
+              [disabled]="submitting() || !bookForm.valid"
+              [attr.aria-busy]="submitting()">
+              {{ submitting() ? 'Sending…' : 'Confirm Booking & Receive SMS' }}
+            </button>
+            <button type="button" class="btn btn-ghost"
+              (click)="triggerCall()"
+              [disabled]="calling() || !form.targetPhone"
+              [attr.aria-busy]="calling()">
+              {{ calling() ? 'Calling…' : '📞 Test Call' }}
+            </button>
+          </div>
+
+        </form>
+      </section>
+    }
+
+    <!-- Live console -->
+    <section class="panel console-panel" aria-label="Live API console">
+      <div class="console-header">
+        <h2 class="panel-title">
+          <span class="panel-icon" aria-hidden="true">🖥</span>
+          Live Console
+        </h2>
+        <button class="btn-clear" (click)="clearConsole()"
+          aria-label="Clear console">Clear</button>
+      </div>
+
+      <div class="console-body" #consoleEl aria-live="polite" aria-atomic="false">
+        @if (consoleLog().length === 0) {
+          <p class="console-empty">No activity yet. Make a booking to see output.</p>
+        }
+        @for (entry of consoleLog(); track $index) {
+          <div class="console-entry" [class]="'entry-' + entry.kind">
+            <span class="entry-ts">{{ entry.ts }}</span>
+            <span class="entry-label">{{ entry.label }}</span>
+            <pre class="entry-payload">{{ entry.payload | json }}</pre>
+          </div>
+        }
+      </div>
+    </section>
+
+  </aside>
+</div>

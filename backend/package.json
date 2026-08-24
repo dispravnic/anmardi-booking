@@ -1,0 +1,22 @@
+{
+  "name": "anmardi-booking-backend",
+  "version": "1.0.0",
+  "description": "EV Spot Booking API — Fastify + Yeastar TG1600 + Asterisk AMI",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "mock": "node mockYeastar.js"
+  },
+  "dependencies": {
+    "fastify": "4.28.1",
+    "@fastify/cors": "9.0.1",
+    "asterisk-manager": "0.1.12",
+    "undici": "6.19.2",
+    "twilio": "5.3.4"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
