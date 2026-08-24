@@ -70,9 +70,8 @@ services:
     dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./frontend
     plan: free
-    # Pass the live backend URL at build time via build arg
-    buildArgs:
-      - API_BASE_URL=https://anmardi-backend.onrender.com
     envVars:
       - key: API_BASE_URL
+        value: https://anmardi-backend.onrender.com/api
+      - key: BACKEND_URL
         value: https://anmardi-backend.onrender.com
