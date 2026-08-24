@@ -1,14 +1,17 @@
 /**
- * app.component.ts — Root shell component
- * Standalone, imports EvMapComponent directly.
+ * app.component.ts — Root shell with conditional nav bar
  */
-import { Component } from '@angular/core';
-import { EvMapComponent } from './components/ev-map.component';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet, RouterLink } from '@angular/router';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [EvMapComponent],
+  imports: [CommonModule, RouterOutlet, RouterLink],
   templateUrl: './app.component.html',
 })
-export class AppComponent {}
+export class AppComponent {
+  auth = inject(AuthService);
+}

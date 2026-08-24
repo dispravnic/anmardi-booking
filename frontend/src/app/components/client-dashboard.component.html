@@ -1,0 +1,91 @@
+<div class="dashboard">
+  <!-- ── Header ───────────────────────────────────────────── -->
+  <header class="dash-header">
+    <div class="header-left">
+      <span class="logo">👤 Client Dashboard</span>
+      @if (user()) {
+        <span class="user-badge">{{ user()!.first_name }} {{ user()!.last_name }}</span>
+      }
+    </div>
+    <div class="header-right">
+      <button class="btn-map" (click)="goToMap()">🗺 EV Map</button>
+      <button class="btn-logout" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- ── Tabs ─────────────────────────────────────────────── -->
+  <div class="tabs">
+    <button class="tab" [class.active]="activeTab() === 'browse'" (click)="activeTab.set('browse')">
+      Browse Providers
+    </button>
+    <button class="tab" [class.active]="activeTab() === 'bookings'" (click)="activeTab.set('bookings')">
+      My Bookings
+    </button>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- ══════ Tab: Browse Providers ════════════════════════ -->
+    @if (activeTab() === 'browse') {
+      <section class="panel">
+        <div class="filter-row">
+          <label for="catFilter">Filter by category:</label>
+          <select id="catFilter" [(ngModel)]="selectedCategory" (ngModelChange)="onCategoryChange()">
+            @for (cat of categories; track cat.value) {
+              <option [value]="cat.value">{{ cat.label }}</option>
+            }
+          </select>
+        </div>
+
+        @if (loadingProviders()) {
+          <p class="empty-msg">Loading providers…</p>
+        } @else if (providers().length === 0) {
+          <p class="empty-msg">No providers found for this category.</p>
+        } @else {
+          <div class="provider-grid">
+            @for (p of providers(); track p.id) {
+              <div class="provider-card">
+                <span class="prov-category">{{ getCategoryLabel(p.business_type) }}</span>
+                <h3 class="prov-name">{{ p.business_name }}</h3>
+                <p class="prov-owner">{{ p.first_name }} {{ p.last_name }}</p>
+                <p class="prov-contact">
+                  📞 {{ p.phone_number }}
+                  @if (p.business_email) {
+                    · ✉ {{ p.business_email }}
+                  }
+                </p>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    }
+
+    <!-- ══════ Tab: My Bookings ═══════════════════════════── -->
+    @if (activeTab() === 'bookings') {
+      <section class="panel">
+        <h2 class="panel-title">Booking History</h2>
+
+        @if (loadingBookings()) {
+          <p class="empty-msg">Loading…</p>
+        } @else if (bookings().length === 0) {
+          <p class="empty-msg">No bookings yet. Go to the <a (click)="goToMap()">EV Map</a> to make your first reservation.</p>
+        } @else {
+          <div class="bookings-list">
+            @for (b of bookings(); track b.id) {
+              <div class="booking-row" [class]="'status-' + b.status">
+                <div class="booking-info">
+                  <strong>{{ b.station_name }}</strong>
+                  <span class="booking-meta">📅 {{ b.date }} at {{ b.time }}</span>
+                  <span class="booking-ref">Ref #{{ b.id }} · SMS: {{ b.sms_client_status }}</span>
+                </div>
+                <span class="status-badge" [class]="b.status">{{ b.status }}</span>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    }
+
+  </div>
+</div>

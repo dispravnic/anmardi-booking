@@ -1,0 +1,173 @@
+/* ── Dashboard layout ──────────────────────────────────────── */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #0d1117;
+  color: #e6edf3;
+}
+
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  flex-shrink: 0;
+}
+
+.header-left { display: flex; align-items: center; gap: 14px; }
+.header-right { display: flex; gap: 8px; }
+.logo { font-size: 1.1rem; font-weight: 700; color: #58a6ff; }
+.user-badge { font-size: .82rem; color: #8b949e; }
+
+.btn-map {
+  background: rgba(46,204,113,.12);
+  border: 1px solid rgba(46,204,113,.3);
+  border-radius: 6px;
+  color: #2ecc71;
+  padding: 6px 14px;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-map:hover { background: rgba(46,204,113,.25); }
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #8b949e;
+  padding: 6px 14px;
+  font-size: .8rem;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+.btn-logout:hover { border-color: #f85149; color: #f85149; }
+
+/* ── Tabs ─────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #30363d;
+  background: #161b22;
+  padding: 0 24px;
+}
+
+.tab {
+  padding: 12px 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #8b949e;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+}
+.tab.active { border-bottom-color: #58a6ff; color: #58a6ff; }
+.tab:hover:not(.active) { color: #e6edf3; }
+
+/* ── Body ─────────────────────────────────────────────────── */
+.dash-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Panel ────────────────────────────────────────────────── */
+.panel {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.panel-title {
+  font-size: .82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #58a6ff;
+  margin-bottom: 16px;
+}
+
+/* ── Filter ───────────────────────────────────────────────── */
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.filter-row label { font-size: .78rem; color: #8b949e; }
+.filter-row select {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #e6edf3;
+  padding: 7px 12px;
+  font-size: .85rem;
+  font-family: inherit;
+}
+.filter-row select:focus { outline: none; border-color: #58a6ff; }
+
+/* ── Provider grid ────────────────────────────────────────── */
+.provider-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+.provider-card {
+  background: #0d1117;
+  border: 1px solid #21262d;
+  border-radius: 8px;
+  padding: 16px;
+  transition: border-color .15s;
+}
+.provider-card:hover { border-color: #58a6ff; }
+
+.prov-category { font-size: .72rem; color: #2ecc71; text-transform: uppercase; letter-spacing: .06em; }
+.prov-name { font-size: .95rem; font-weight: 700; color: #e6edf3; margin: 6px 0 4px; }
+.prov-owner { font-size: .8rem; color: #8b949e; margin-bottom: 6px; }
+.prov-contact { font-size: .75rem; color: #8b949e; }
+
+/* ── Bookings list ────────────────────────────────────────── */
+.bookings-list { display: flex; flex-direction: column; gap: 10px; }
+
+.booking-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: #0d1117;
+  border: 1px solid #21262d;
+  border-radius: 8px;
+}
+.booking-row.status-pending { border-left: 3px solid #f0ad4e; }
+.booking-row.status-confirmed { border-left: 3px solid #2ecc71; }
+.booking-row.status-cancelled { border-left: 3px solid #f85149; opacity: .6; }
+
+.booking-info { display: flex; flex-direction: column; gap: 3px; }
+.booking-info strong { font-size: .88rem; color: #e6edf3; }
+.booking-meta { font-size: .78rem; color: #8b949e; }
+.booking-ref { font-size: .7rem; color: #484f58; }
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.status-badge.pending { background: rgba(240,173,78,.15); color: #f0ad4e; }
+.status-badge.confirmed { background: rgba(46,204,113,.15); color: #2ecc71; }
+.status-badge.cancelled { background: rgba(248,81,73,.15); color: #f85149; }
+
+.empty-msg { text-align: center; color: #484f58; font-size: .85rem; padding: 24px 0; }
+.empty-msg a { color: #58a6ff; cursor: pointer; text-decoration: underline; }

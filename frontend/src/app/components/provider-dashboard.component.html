@@ -1,0 +1,100 @@
+<div class="dashboard">
+  <!-- ── Header ───────────────────────────────────────────── -->
+  <header class="dash-header">
+    <div class="header-left">
+      <span class="logo">🏢 Provider Dashboard</span>
+      @if (user()) {
+        <span class="user-badge">{{ user()!.first_name }} {{ user()!.last_name }}</span>
+      }
+    </div>
+    <button class="btn-logout" (click)="logout()">Logout</button>
+  </header>
+
+  <div class="dash-body">
+
+    <!-- ── Business Card ──────────────────────────────────── -->
+    @if (user()) {
+      <section class="panel biz-card">
+        <h2 class="panel-title">Your Business</h2>
+        <div class="biz-grid">
+          <div class="biz-item">
+            <span class="biz-label">Business Name</span>
+            <span class="biz-value">{{ user()!.business_name ?? '—' }}</span>
+          </div>
+          <div class="biz-item">
+            <span class="biz-label">Category</span>
+            <span class="biz-value cat-badge">{{ getBusinessTypeLabel(user()!.business_type) }}</span>
+          </div>
+          <div class="biz-item">
+            <span class="biz-label">Phone (SMS)</span>
+            <span class="biz-value">{{ user()!.phone_number ?? '—' }}</span>
+          </div>
+          <div class="biz-item">
+            <span class="biz-label">Email</span>
+            <span class="biz-value">{{ user()!.email }}</span>
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- ── Stats ──────────────────────────────────────────── -->
+    <section class="stats-row">
+      <div class="stat-card">
+        <span class="stat-num">{{ totalCount }}</span>
+        <span class="stat-label">Total Bookings</span>
+      </div>
+      <div class="stat-card stat-pending">
+        <span class="stat-num">{{ pendingCount }}</span>
+        <span class="stat-label">Pending</span>
+      </div>
+      <div class="stat-card stat-confirmed">
+        <span class="stat-num">{{ confirmedCount }}</span>
+        <span class="stat-label">Confirmed</span>
+      </div>
+    </section>
+
+    <!-- ── Bookings List ──────────────────────────────────── -->
+    <section class="panel">
+      <h2 class="panel-title">Incoming Bookings</h2>
+
+      @if (loading()) {
+        <p class="empty-msg">Loading bookings…</p>
+      } @else if (bookings().length === 0) {
+        <p class="empty-msg">No bookings yet. Clients will appear here when they reserve.</p>
+      } @else {
+        <div class="bookings-list">
+          @for (b of bookings(); track b.id) {
+            <div class="booking-row" [class]="'status-' + b.status">
+              <div class="booking-info">
+                <strong class="booking-station">{{ b.station_name }}</strong>
+                <span class="booking-meta">
+                  📅 {{ b.date }} at {{ b.time }} · 📞 {{ b.target_phone }}
+                </span>
+                <span class="booking-ref">Ref #{{ b.id }} · {{ b.created_at | date:'short' }}</span>
+              </div>
+
+              <div class="booking-status">
+                <span class="status-badge" [class]="b.status">{{ b.status }}</span>
+              </div>
+
+              <div class="booking-actions">
+                @if (b.status === 'pending') {
+                  <button class="btn-action btn-confirm"
+                    (click)="updateStatus(b.id, 'confirmed')"
+                    [disabled]="actionLoading() === b.id">
+                    ✅ Confirm
+                  </button>
+                  <button class="btn-action btn-cancel"
+                    (click)="updateStatus(b.id, 'cancelled')"
+                    [disabled]="actionLoading() === b.id">
+                    ❌ Cancel
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</div>

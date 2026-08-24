@@ -1,34 +1,77 @@
-<!-- app.component.html — full-height shell -->
+<!-- app.component.html — shell with conditional nav + router outlet -->
 <header class="app-header">
-  <span class="logo">&#9889; AnMardi EV Booking</span>
-  <span class="subtitle">Bucharest Charging Stations</span>
+  <a routerLink="/" class="logo">⚡ AnMardi EV Booking</a>
+
+  <nav class="nav-links">
+    @if (!auth.isLoggedIn()) {
+      <a routerLink="/login" class="nav-link">Sign In</a>
+      <a routerLink="/register" class="nav-link nav-link--primary">Register</a>
+    }
+
+    @if (auth.isLoggedIn() && auth.isClient()) {
+      <a routerLink="/dashboard/client" class="nav-link">Dashboard</a>
+      <a routerLink="/map" class="nav-link">EV Map</a>
+    }
+
+    @if (auth.isLoggedIn() && auth.isProvider()) {
+      <a routerLink="/dashboard/provider" class="nav-link">Dashboard</a>
+      <a routerLink="/map" class="nav-link">EV Map</a>
+    }
+  </nav>
 </header>
 
 <main class="app-main">
-  <app-ev-map />
+  <router-outlet />
 </main>
 
 <style>
   .app-header {
     display: flex;
     align-items: center;
-    gap: 16px;
+    justify-content: space-between;
     padding: 12px 24px;
-    background: var(--brand-mid);
+    background: var(--brand-mid, #16213e);
     border-bottom: 1px solid rgba(255,255,255,.08);
     flex-shrink: 0;
   }
 
   .logo {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    color: var(--brand-green);
+    color: var(--brand-green, #2ecc71);
+    text-decoration: none;
     letter-spacing: .03em;
   }
 
-  .subtitle {
-    font-size: .85rem;
-    color: var(--text-muted);
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-link {
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--text-muted, #a0a0b0);
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: color .15s, background .15s;
+  }
+
+  .nav-link:hover {
+    color: #e6edf3;
+    background: rgba(255,255,255,.06);
+  }
+
+  .nav-link--primary {
+    background: var(--brand-green, #2ecc71);
+    color: #0d1117;
+    font-weight: 700;
+  }
+  .nav-link--primary:hover {
+    opacity: .88;
+    color: #0d1117;
   }
 
   .app-main {

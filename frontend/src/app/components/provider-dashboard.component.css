@@ -1,0 +1,145 @@
+/* ── Dashboard layout ──────────────────────────────────────── */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #0d1117;
+  color: #e6edf3;
+}
+
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  flex-shrink: 0;
+}
+
+.header-left { display: flex; align-items: center; gap: 14px; }
+.logo { font-size: 1.1rem; font-weight: 700; color: #2ecc71; }
+.user-badge { font-size: .82rem; color: #8b949e; }
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #8b949e;
+  padding: 6px 14px;
+  font-size: .8rem;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+.btn-logout:hover { border-color: #f85149; color: #f85149; }
+
+.dash-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Panel ────────────────────────────────────────────────── */
+.panel {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.panel-title {
+  font-size: .82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #58a6ff;
+  margin-bottom: 16px;
+}
+
+/* ── Business card ────────────────────────────────────────── */
+.biz-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.biz-item { display: flex; flex-direction: column; gap: 3px; }
+.biz-label { font-size: .7rem; text-transform: uppercase; color: #8b949e; letter-spacing: .06em; }
+.biz-value { font-size: .9rem; color: #e6edf3; font-weight: 500; }
+.cat-badge { color: #2ecc71; }
+
+/* ── Stats ────────────────────────────────────────────────── */
+.stats-row { display: flex; gap: 14px; }
+
+.stat-card {
+  flex: 1;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+.stat-num { display: block; font-size: 1.8rem; font-weight: 700; color: #e6edf3; }
+.stat-label { font-size: .72rem; text-transform: uppercase; color: #8b949e; letter-spacing: .06em; }
+.stat-pending .stat-num { color: #f0ad4e; }
+.stat-confirmed .stat-num { color: #2ecc71; }
+
+/* ── Bookings list ────────────────────────────────────────── */
+.bookings-list { display: flex; flex-direction: column; gap: 10px; }
+
+.booking-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: #0d1117;
+  border: 1px solid #21262d;
+  border-radius: 8px;
+  transition: border-color .15s;
+}
+.booking-row.status-pending { border-left: 3px solid #f0ad4e; }
+.booking-row.status-confirmed { border-left: 3px solid #2ecc71; }
+.booking-row.status-cancelled { border-left: 3px solid #f85149; opacity: .6; }
+
+.booking-info { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.booking-station { font-size: .88rem; color: #e6edf3; }
+.booking-meta { font-size: .78rem; color: #8b949e; }
+.booking-ref { font-size: .7rem; color: #484f58; }
+
+.booking-status { width: 90px; text-align: center; }
+.status-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.status-badge.pending { background: rgba(240,173,78,.15); color: #f0ad4e; }
+.status-badge.confirmed { background: rgba(46,204,113,.15); color: #2ecc71; }
+.status-badge.cancelled { background: rgba(248,81,73,.15); color: #f85149; }
+
+.booking-actions { display: flex; gap: 6px; }
+
+.btn-action {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: .75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.btn-action:disabled { opacity: .4; cursor: not-allowed; }
+.btn-confirm { background: rgba(46,204,113,.2); color: #2ecc71; }
+.btn-confirm:hover:not(:disabled) { background: rgba(46,204,113,.35); }
+.btn-cancel { background: rgba(248,81,73,.15); color: #f85149; }
+.btn-cancel:hover:not(:disabled) { background: rgba(248,81,73,.3); }
+
+.empty-msg { text-align: center; color: #484f58; font-size: .85rem; padding: 24px 0; }
